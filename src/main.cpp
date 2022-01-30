@@ -8,7 +8,7 @@ using qr::decode;
 
 
 int main() {
-    std::ifstream file("./helloworld.dat", std::ios::binary | std::ios::in);
+    std::ifstream file("./resources/helloworld.dat", std::ios::binary | std::ios::in);
     if (!file) {
         std::cerr << "Could not open file\n";
         return 1;
@@ -19,9 +19,9 @@ int main() {
     file.read(reinterpret_cast<char*>(image), width * height);
 
     auto results = decode(image, width, height);
-    std::cout << results.size() << "\n";
+    std::cout << "Found " << results.size() << " qr code(s) in image" << "\n";
     for (const auto& result: results) {
-        std::cout << "====  Code ====\n";
+        std::cout << "==== Payload ====\n";
         for (int i=0; i < result.payload_len; i++) {
             std::cout << static_cast<char>(result.payload[i]);
         }

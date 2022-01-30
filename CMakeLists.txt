@@ -26,9 +26,9 @@ target_include_directories(quirc++ PUBLIC include)
 target_compile_features(quirc++ PRIVATE cxx_std_14)
 set_property(TARGET quirc++ PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-add_executable(example src/main.cpp)
-target_link_libraries(example PRIVATE quirc++)
-target_compile_features(example PRIVATE cxx_std_14)
+add_executable(quirc_cpp_example src/main.cpp)
+target_link_libraries(quirc_cpp_example PRIVATE quirc++)
+target_compile_features(quirc_cpp_example PRIVATE cxx_std_14)
 
 find_package(pybind11 REQUIRED)
 pybind11_add_module(quirc src/pyquirc.cpp)
