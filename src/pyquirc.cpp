@@ -2,7 +2,6 @@
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 #include "quirc++/qr.h"
-#include <iostream>
 
 namespace py = pybind11;
 
@@ -16,11 +15,6 @@ std::vector<quirc_data> decode(const py::array_t<uint8_t>& buffer) {
     return qr::decode(static_cast<uint8_t*>(info.ptr), width, height);
 }
 
-std::vector<quirc_data> decode_bytes(const std::string& buffer, int width, int height) {
-    std::cout << width << " " << height << " " << width * height << " " << buffer.size() << std::endl;
-    return qr::decode(reinterpret_cast<uint8_t*>(buffer.front()), width, height);
-}
-
 py::object payload(const quirc_data& self) {
     return py::bytes(std::string(self.payload, self.payload + self.payload_len));
 }
@@ -32,5 +26,4 @@ PYBIND11_MODULE(quirc, m) {
         ;
     m.doc() = "Python bindings for quirc";
     m.def("decode", &decode, "Decode qr codes in image");
-    m.def("decode_bytes", &decode_bytes, "Decode qr codes in bytes");
 }
