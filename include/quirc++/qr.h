@@ -11,10 +11,6 @@
 
 namespace qr {
 
-struct Image {
-};
-
-
 class QR {
     public:
         QR();
