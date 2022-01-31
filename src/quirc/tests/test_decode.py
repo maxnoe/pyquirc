@@ -61,10 +61,13 @@ def test_ecc_level_Q(ecc_level_Q):
 def test_two(two_codes):
     import quirc
 
-    codes = quirc.decode(two_codes)
-    assert len(codes) == 2
+    # Somehow quirc finds 3 qr codes in the image with only two
+    # and decoding # the fake one fails
+    # with pytest.warns(UserWarning):
+    with pytest.warns(UserWarning):
+        codes = quirc.decode(two_codes)
 
+    assert len(codes) == 2
     payloads = {c.payload for c in codes}
-    print(payloads)
     assert b'I am the first QR Code' in payloads
     assert b'I am the second QR Code' in payloads
