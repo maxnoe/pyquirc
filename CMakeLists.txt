@@ -18,12 +18,12 @@ endif()
 
 add_library(
     libquirc
-    quirc/lib/quirc.c
-    quirc/lib/decode.c
-    quirc/lib/identify.c
-    quirc/lib/version_db.c
+    extern/quirc/lib/quirc.c
+    extern/quirc/lib/decode.c
+    extern/quirc/lib/identify.c
+    extern/quirc/lib/version_db.c
 )
-target_include_directories(libquirc PUBLIC quirc/lib)
+target_include_directories(libquirc PUBLIC extern/quirc/lib)
 target_compile_definitions(libquirc PRIVATE QUIRC_MAX_REGIONS=65534)
 set_property(TARGET libquirc PROPERTY POSITION_INDEPENDENT_CODE ON)
 set_property(TARGET libquirc PROPERTY OUTPUT_NAME "quirc")
