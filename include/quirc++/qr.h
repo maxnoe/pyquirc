@@ -18,7 +18,7 @@ class QR {
     public:
         QR();
 
-        void fill_image(const uint8_t* image, int width, int height);
+        void fill_image(const uint8_t* image, size_t width, size_t height);
         int count();
         quirc_code extract(int index);
         Data decode(const quirc_code& code);
@@ -39,12 +39,12 @@ class QR {
         int width = 0;
         int height = 0;
 
-        void resize(int width, int height);
+        void resize(size_t width, size_t height);
         uint8_t* begin();
         void end();
 };
 
-std::vector<Data> decode(const uint8_t* image, int width, int height);
+std::vector<Data> decode(const uint8_t* image, size_t width, size_t height);
 
 }
 #endif /* ifndef QUIRCPP_QR */

@@ -15,7 +15,7 @@ QR::~QR() {
     }
 }
 
-void QR::fill_image(const uint8_t* buffer, int width, int height) {
+void QR::fill_image(const uint8_t* buffer, size_t width, size_t height) {
     resize(width, height);
     uint8_t* qr_buffer = begin();
 
@@ -28,7 +28,7 @@ void QR::fill_image(const uint8_t* buffer, int width, int height) {
 }
 
 
-void QR::resize(int width, int height) {
+void QR::resize(size_t width, size_t height) {
     auto ret = quirc_resize(ptr, width, height);
     if (ret < 0) {
         throw std::bad_alloc();

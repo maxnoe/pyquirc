@@ -3,7 +3,7 @@
 
 namespace qr {
 
-std::vector<Data> decode(const uint8_t* image, int width, int height) {
+std::vector<Data> decode(const uint8_t* image, size_t width, size_t height) {
     QR qr;
     qr.fill_image(image, width, height);
 

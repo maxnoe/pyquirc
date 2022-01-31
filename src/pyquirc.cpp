@@ -20,8 +20,8 @@ std::vector<Data> decode(const py::array_t<uint8_t>& buffer) {
     if (info.ndim != 2) {
         throw std::invalid_argument("Must be a 2d buffer");
     }
-    int height = info.shape[0];
-    int width = info.shape[1];
+    size_t height = info.shape[0];
+    size_t width = info.shape[1];
     return qr::decode(static_cast<uint8_t*>(info.ptr), width, height);
 }
 
