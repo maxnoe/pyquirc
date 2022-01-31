@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.17..3.22)
 project(PYQUIRC VERSION 0.1.0 LANGUAGES C CXX)
 
+option(CPP_EXAMPLE "Build the C++ example program" ON)
+
 if(SKBUILD)
   # Scikit-Build does not add your site-packages to the search path
   # automatically, so we need to add it _or_ the pybind11 specific directory
@@ -37,9 +39,11 @@ target_include_directories(quirc++ PUBLIC include)
 target_compile_features(quirc++ PRIVATE cxx_std_14)
 set_property(TARGET quirc++ PROPERTY POSITION_INDEPENDENT_CODE ON)
 
-add_executable(quirc_cpp_example src/main.cpp)
-target_link_libraries(quirc_cpp_example PRIVATE quirc++)
-target_compile_features(quirc_cpp_example PRIVATE cxx_std_14)
+if(CPP_EXAMPLE)
+    add_executable(quirc_cpp_example src/main.cpp)
+    target_link_libraries(quirc_cpp_example PRIVATE quirc++)
+    target_compile_features(quirc_cpp_example PRIVATE cxx_std_14)
+endif()
 
 find_package(Python3 REQUIRED COMPONENTS Development Interpreter)
 find_package(pybind11 REQUIRED)
