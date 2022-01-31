@@ -41,6 +41,7 @@ jobs:
 
   cmake_build:
     name: "CMake build"
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
         with:
