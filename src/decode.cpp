@@ -15,7 +15,7 @@ std::vector<Data> decode(const uint8_t* image, size_t width, size_t height) {
     for (int i=0; i < num_codes; i++) {
         try {
             parsed_codes.push_back(decoder.decode_index(i));
-        } catch(std::runtime_error) {
+        } catch(std::runtime_error&) {
             continue;
         }
     }
