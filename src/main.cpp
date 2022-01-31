@@ -1,9 +1,8 @@
 #include <quirc.h>
 #include <iostream>
 #include <fstream>
-#include <quirc++/qr.h>
+#include <quirc++/decoder.h>
 
-using qr::QR;
 using qr::decode;
 
 

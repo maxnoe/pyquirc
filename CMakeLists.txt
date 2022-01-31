@@ -40,7 +40,7 @@ set_property(TARGET quirc PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 add_library(
     quirc++
-    src/qr.cpp
+    src/decoder.cpp
     src/decode.cpp
 )
 target_link_libraries(quirc++ PUBLIC quirc)

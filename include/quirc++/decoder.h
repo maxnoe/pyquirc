@@ -14,25 +14,31 @@ namespace qr {
 
 #include <quirc.h>
 
-class QR {
+class Decoder {
     public:
-        QR();
+        Decoder();
+        Decoder(const uint8_t* image, size_t width, size_t height);
 
         void fill_image(const uint8_t* image, size_t width, size_t height);
         int count();
         quirc_code extract(int index);
         Data decode(const quirc_code& code);
+        Data decode_index(int index);
 
         //  explicitly deleted since we are wrapping
         //  C code that allocates
-        QR& operator=(const QR&) = delete;
-        QR(const QR&) = delete;
+        Decoder& operator=(const Decoder&) = delete;
+        Decoder(const Decoder&) = delete;
 
         // Could be implemented but not for now
-        QR& operator=(QR&&) = delete;
-        QR(QR&&) = delete;
+        Decoder& operator=(Decoder&&) = delete;
 
-        ~QR();
+        Decoder(Decoder&& other) {
+            ptr = other.ptr;
+            other.ptr = nullptr;
+        }
+
+        ~Decoder();
 
     private:
         quirc* ptr = nullptr;

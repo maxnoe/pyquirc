@@ -1,12 +1,28 @@
-from .quirc import decode, Data, DataType, ECI, ECCLevel
+import warnings
+
+from .quirc import Decoder, Data, DataType, ECI, ECCLevel
 
 __all__ = [
-    'decode',
+    'Decoder',
     'Data',
     'DataType',
     'ECI',
     'ECCLevel',
 ]
+
+
+def decode(img):
+    decoder = Decoder(img)
+    n_codes = len(decoder)
+
+    codes = []
+    for i in range(len(decoder)):
+        try:
+            codes.append(decoder[i])
+        except RuntimeError:
+            warnings.warn(f"Failed to decode index {i} ({n_codes} codes total)")
+
+    return codes
 
 
 # easier to do correctly in python

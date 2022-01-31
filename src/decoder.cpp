@@ -1,21 +1,26 @@
-#include "quirc++/qr.h"
+#include "quirc++/decoder.h"
+#include <sstream>
 
 namespace qr {
 
-QR::QR() {
+Decoder::Decoder() {
     ptr = quirc_new();
     if (!ptr) {
         throw std::bad_alloc();
     }
 }
 
-QR::~QR() {
+Decoder::~Decoder() {
     if (ptr) {
         quirc_destroy(ptr);
     }
 }
 
-void QR::fill_image(const uint8_t* buffer, size_t width, size_t height) {
+Decoder::Decoder(const uint8_t* buffer, size_t width, size_t height) : Decoder() {
+    fill_image(buffer, width, height);
+}
+
+void Decoder::fill_image(const uint8_t* buffer, size_t width, size_t height) {
     resize(width, height);
     uint8_t* qr_buffer = begin();
 
@@ -28,24 +33,36 @@ void QR::fill_image(const uint8_t* buffer, size_t width, size_t height) {
 }
 
 
-void QR::resize(size_t width, size_t height) {
+void Decoder::resize(size_t width, size_t height) {
     auto ret = quirc_resize(ptr, width, height);
     if (ret < 0) {
         throw std::bad_alloc();
     }
 }
 
-int QR::count() {
+int Decoder::count() {
     return quirc_count(ptr);
 }
 
-quirc_code QR::extract(int index) {
+quirc_code Decoder::extract(int index) {
+    if (index < 0 || index > count()) {
+        std::stringstream msg;
+        msg << "Index " << index << " is out of bounds, found " << count() << " codes";
+        throw std::out_of_range(msg.str());
+    }
     quirc_code code;
     quirc_extract(ptr, index, &code);
     return code;
 }
 
-Data QR::decode(const quirc_code& code) {
+
+Data Decoder::decode_index(int index) {
+    quirc_code code = extract(index);
+    return decode(code);
+}
+
+
+Data Decoder::decode(const quirc_code& code) {
     quirc_data data;
     auto err = quirc_decode(&code, &data);
 
@@ -63,11 +80,11 @@ Data QR::decode(const quirc_code& code) {
     return Data(data);
 }
 
-uint8_t* QR::begin() {
+uint8_t* Decoder::begin() {
     return quirc_begin(ptr, &width, &height);
 }
 
-void QR::end() {
+void Decoder::end() {
     quirc_end(ptr);
 }
 

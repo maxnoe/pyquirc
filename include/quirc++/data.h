@@ -50,6 +50,7 @@ struct Data {
     std::vector<uint8_t> payload;
     ECI eci;
 
+    Data() {};
     Data(quirc_data data) : 
         version(data.version),
         ecc_level(ECCLevel(data.ecc_level)),

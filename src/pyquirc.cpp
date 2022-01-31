@@ -4,25 +4,26 @@
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
 
-#include "quirc++/qr.h"
+#include "quirc++/decoder.h"
 #include "quirc++/data.h"
 
 namespace py = pybind11;
 
+using qr::Decoder;
 using qr::Data;
 using qr::ECI;
 using qr::ECCLevel;
 using qr::DataType;
 
 
-std::vector<Data> decode(const py::array_t<uint8_t>& buffer) {
+Decoder Decoder_from_image(py::array_t<uint8_t>& buffer) {
     py::buffer_info info = buffer.request();
     if (info.ndim != 2) {
         throw std::invalid_argument("Must be a 2d buffer");
     }
     size_t height = info.shape[0];
     size_t width = info.shape[1];
-    return qr::decode(static_cast<uint8_t*>(info.ptr), width, height);
+    return Decoder(static_cast<uint8_t*>(info.ptr), width, height);
 }
 
 py::object Data_payload(const Data& self) {
@@ -75,5 +76,9 @@ PYBIND11_MODULE(quirc, m) {
         .def_property_readonly("payload", &Data_payload)
         ;
 
-    m.def("decode", &decode, "Decode qr codes in image", py::arg("img"));
+    py::class_<Decoder>(m, "Decoder")
+        .def(py::init(&Decoder_from_image))
+        .def("__len__", &Decoder::count)
+        .def("__getitem__", &Decoder::decode_index)
+        ;
 }

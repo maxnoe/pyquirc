@@ -1,18 +1,23 @@
-#include "quirc++/qr.h"
+#include "quirc++/decoder.h"
 #include "quirc++/data.h"
+#include <iostream>
 
 namespace qr {
 
 std::vector<Data> decode(const uint8_t* image, size_t width, size_t height) {
-    QR qr;
-    qr.fill_image(image, width, height);
+    Decoder decoder;
+    decoder.fill_image(image, width, height);
 
-    auto num_codes = qr.count();
+    auto num_codes = decoder.count();
     std::vector<Data> parsed_codes;
     parsed_codes.reserve(num_codes);
+
     for (int i=0; i < num_codes; i++) {
-        quirc_code code = qr.extract(i);
-        parsed_codes.push_back(qr.decode(code));
+        try {
+            parsed_codes.push_back(decoder.decode_index(i));
+        } catch(std::runtime_error) {
+            continue;
+        }
     }
 
     return parsed_codes;
