@@ -45,7 +45,7 @@ quirc_code QR::extract(int index) {
     return code;
 }
 
-quirc_data QR::decode(const quirc_code& code) {
+Data QR::decode(const quirc_code& code) {
     quirc_data data;
     auto err = quirc_decode(&code, &data);
 
@@ -60,7 +60,7 @@ quirc_data QR::decode(const quirc_code& code) {
         throw std::runtime_error(quirc_strerror(err));
     }
 
-    return data;
+    return Data(data);
 }
 
 uint8_t* QR::begin() {

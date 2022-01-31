@@ -1,15 +1,18 @@
 #ifndef QUIRCPP_QR
 #define QUIRCPP_QR
 
-#include <quirc.h>
 #include <cstdint>
 #include <new>
 #include <stdexcept>
 #include <vector>
 
+#include "quirc++/data.h"
+
 
 
 namespace qr {
+
+#include <quirc.h>
 
 class QR {
     public:
@@ -18,7 +21,7 @@ class QR {
         void fill_image(const uint8_t* image, int width, int height);
         int count();
         quirc_code extract(int index);
-        quirc_data decode(const quirc_code& code);
+        Data decode(const quirc_code& code);
 
         //  explicitly deleted since we are wrapping
         //  C code that allocates
@@ -41,7 +44,7 @@ class QR {
         void end();
 };
 
-std::vector<quirc_data> decode(const uint8_t* image, int width, int height);
+std::vector<Data> decode(const uint8_t* image, int width, int height);
 
 }
 #endif /* ifndef QUIRCPP_QR */

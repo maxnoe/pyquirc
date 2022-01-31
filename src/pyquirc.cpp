@@ -3,47 +3,19 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
+
 #include "quirc++/qr.h"
+#include "quirc++/data.h"
 
 namespace py = pybind11;
 
-enum class DataType {
-    NUMERIC = QUIRC_DATA_TYPE_NUMERIC,
-    ALPHA = QUIRC_DATA_TYPE_ALPHA,
-    BYTE = QUIRC_DATA_TYPE_BYTE,
-    KANJI = QUIRC_DATA_TYPE_KANJI,
-};
+using qr::Data;
+using qr::ECI;
+using qr::ECCLevel;
+using qr::DataType;
 
 
-enum class ECCLevel {
-    M = QUIRC_ECC_LEVEL_M,
-    L = QUIRC_ECC_LEVEL_L,
-    H = QUIRC_ECC_LEVEL_H,
-    Q = QUIRC_ECC_LEVEL_Q,
-};
-
-
-enum class ECI {
-    UNDEFINED = 0,
-    ISO_8859_1 = QUIRC_ECI_ISO_8859_1,
-    IBM437 = QUIRC_ECI_IBM437,
-    ISO_8859_2 = QUIRC_ECI_ISO_8859_2,
-    ISO_8859_3 = QUIRC_ECI_ISO_8859_3,
-    ISO_8859_4 = QUIRC_ECI_ISO_8859_4,
-    ISO_8859_5 = QUIRC_ECI_ISO_8859_5,
-    ISO_8859_6 = QUIRC_ECI_ISO_8859_6,
-    ISO_8859_7 = QUIRC_ECI_ISO_8859_7,
-    ISO_8859_8 = QUIRC_ECI_ISO_8859_8,
-    ISO_8859_9 = QUIRC_ECI_ISO_8859_9,
-    WINDOWS_874 = QUIRC_ECI_WINDOWS_874,
-    ISO_8859_13 = QUIRC_ECI_ISO_8859_13,
-    ISO_8859_15 = QUIRC_ECI_ISO_8859_15,
-    SHIFT_JIS = QUIRC_ECI_SHIFT_JIS,
-    UTF_8 = QUIRC_ECI_UTF_8,
-};
-
-
-std::vector<quirc_data> decode(const py::array_t<uint8_t>& buffer) {
+std::vector<Data> decode(const py::array_t<uint8_t>& buffer) {
     py::buffer_info info = buffer.request();
     if (info.ndim != 2) {
         throw std::invalid_argument("Must be a 2d buffer");
@@ -53,8 +25,8 @@ std::vector<quirc_data> decode(const py::array_t<uint8_t>& buffer) {
     return qr::decode(static_cast<uint8_t*>(info.ptr), width, height);
 }
 
-py::object Data_payload(const quirc_data& self) {
-    return py::bytes(std::string(self.payload, self.payload + self.payload_len));
+py::object Data_payload(const Data& self) {
+    return py::bytes(std::string(self.payload.begin(), self.payload.end()));
 }
 
 
@@ -94,12 +66,12 @@ PYBIND11_MODULE(quirc, m) {
         .value("UTF_8", ECI::UTF_8)
         ;
 
-    py::class_<quirc_data>(m, "Data")
-        .def_readonly("version", &quirc_data::version)
-        .def_property_readonly("ecc_level", [](const quirc_data& self) {return ECCLevel(self.ecc_level);})
-        .def_readonly("mask", &quirc_data::mask)
-        .def_property_readonly("data_type", [](const quirc_data& self) {return DataType(self.data_type);})
-        .def_property_readonly("eci", [](const quirc_data& self) {return ECI(self.eci);})
+    py::class_<Data>(m, "Data")
+        .def_readonly("version", &Data::version)
+        .def_readonly("ecc_level", &Data::ecc_level)
+        .def_readonly("mask", &Data::mask)
+        .def_readonly("data_type", &Data::data_type)
+        .def_readonly("eci", &Data::data_type)
         .def_property_readonly("payload", &Data_payload)
         ;
 

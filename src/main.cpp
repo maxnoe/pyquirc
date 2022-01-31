@@ -22,8 +22,8 @@ int main() {
     std::cout << "Found " << results.size() << " qr code(s) in image" << "\n";
     for (const auto& result: results) {
         std::cout << "==== Payload ====\n";
-        for (int i=0; i < result.payload_len; i++) {
-            std::cout << static_cast<char>(result.payload[i]);
+        for (auto byte: result.payload) {
+            std::cout << static_cast<char>(byte);
         }
         std::cout << '\n';
     }
