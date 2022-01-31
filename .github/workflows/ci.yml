@@ -38,3 +38,20 @@ jobs:
           python examply.py
 
       - uses: codecov/codecov-action@v2
+
+  cmake_build:
+    name: "CMake build"
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: "Build"
+        run:
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/quirc++
+          cmake --build build -- -j 2
+          cmake --install build
