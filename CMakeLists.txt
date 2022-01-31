@@ -41,8 +41,11 @@ add_executable(quirc_cpp_example src/main.cpp)
 target_link_libraries(quirc_cpp_example PRIVATE quirc++)
 target_compile_features(quirc_cpp_example PRIVATE cxx_std_14)
 
+find_package(Python3 REQUIRED COMPONENTS Development Interpreter)
 find_package(pybind11 REQUIRED)
 pybind11_add_module(quirc src/pyquirc.cpp)
 target_link_libraries(quirc PRIVATE quirc++)
 
-install(TARGETS quirc DESTINATION .)
+if(SKBUILD)
+    install(TARGETS quirc DESTINATION .)
+endif()
