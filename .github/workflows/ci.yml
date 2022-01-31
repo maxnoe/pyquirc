@@ -52,7 +52,7 @@ jobs:
           python-version: 3.9
 
       - name: "Build"
-        run:
+        run: |
           cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=~/.local/quirc++
           cmake --build build -- -j 2
           cmake --install build
