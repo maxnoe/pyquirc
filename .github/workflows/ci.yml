@@ -53,7 +53,7 @@ jobs:
 
       - name: "Install pybind"
         run: |
-          apt-get install python-pybind11
+          sudo apt-get install python-pybind11
 
       - name: "Build"
         run: |
