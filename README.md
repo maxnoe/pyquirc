@@ -21,4 +21,11 @@ print(f'Found {len(decoded_codes)} qr code(s) in the image')
 
 for data in decoded_codes:
     print(data)
+    
+```
+
+Output:
+```
+Found 1 qr code(s) in the image
+Data(payload=b'Hello, World!', version=1, data_type=DataType.BYTE, eci=ECI.UNDEFINED, ecc_level=ECCLevel.M, mask=5)
 ```
