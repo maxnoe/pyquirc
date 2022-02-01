@@ -50,8 +50,40 @@ py::object Data_payload(const Data& self) {
 }
 
 
+std::vector<std::vector<bool>> Code_matrix(const qr::quirc_code& self) {
+    size_t size = static_cast<size_t>(self.size);
+    std::vector<std::vector<bool>> matrix(size);
+    for (size_t row=0; row < size; row++) {
+        matrix[row].resize(size);
+        for (size_t col=0; col < size; col++) {
+            size_t i = row * size + col;
+	        matrix[row][col] = self.cell_bitmap[i >> 3] & (1 << (i & 0b111));
+        }
+    }
+    return matrix;
+}
+
+
 PYBIND11_MODULE(quirc, m) {
     m.doc() = "Python bindings for quirc";
+
+    py::class_<qr::quirc_point>(m, "Point")
+        .def_readonly("x", &qr::quirc_point::x)
+        .def_readonly("y", &qr::quirc_point::y)
+        .def("__repr__", [](const qr::quirc_point& self){
+            std::stringstream s;
+            s << "Point(" << self.x << ", " << self.y << ")";
+            return s.str();
+        })
+        ;
+
+    py::class_<qr::quirc_code>(m, "Code")
+        .def_property_readonly("corners", [](const qr::quirc_code& self) {
+            return std::vector<qr::quirc_point>(self.corners, self.corners + 4);
+        })
+        .def_readonly("size", &qr::quirc_code::size)
+        .def_property_readonly("matrix", &Code_matrix)
+        ;
 
     py::enum_<DataType>(m, "DataType")
         .value("NUMERIC", DataType::NUMERIC)
@@ -100,5 +132,7 @@ PYBIND11_MODULE(quirc, m) {
         .def_static("from_bytes", &Decoder_from_bytes, py::arg("bytes"), py::arg("width"), py::arg("height"))
         .def("__len__", &Decoder::count)
         .def("__getitem__", &Decoder::decode_index, py::arg("index"))
+        .def("extract", &Decoder::extract)
+        .def("decode", &Decoder::decode)
         ;
 }
