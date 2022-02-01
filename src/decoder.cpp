@@ -45,7 +45,7 @@ size_t Decoder::count() {
 }
 
 quirc_code Decoder::extract(size_t index) {
-    if (index < 0 || index > count()) {
+    if (index >= count()) {
         std::stringstream msg;
         msg << "Index " << index << " is out of bounds, found " << count() << " codes";
         throw std::out_of_range(msg.str());
