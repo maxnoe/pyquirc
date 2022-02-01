@@ -37,6 +37,11 @@ jobs:
         run: |
           python examples/simple.py
 
+      - name: "Run entry point"
+        run: |
+          pyquirc_decode --help
+          pyquirc_decode resources/helloworld.png -v | grep 'Hello, World!'
+
       - uses: codecov/codecov-action@v2
 
   cmake_build:

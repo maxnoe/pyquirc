@@ -29,3 +29,21 @@ Output:
 Found 1 qr code(s) in the image
 Data(payload=b'Hello, World!', version=1, data_type=DataType.BYTE, eci=ECI.UNDEFINED, ecc_level=ECCLevel.M, mask=5)
 ```
+
+
+## On the Command Line
+
+This package also installs the tool `pyquirc_decode`, which will
+use `pillow` as above and decode the QR code in the given image.
+
+The payloads of each decoded qr code will be printed to stdout, one per line:
+
+```
+$ pyquirc_decode resources/helloworld.png -v
+INFO Found 1 qr code in image
+INFO --- Payload 1 ---
+Hello, World!
+```
+
+The log messages come on stderr, so piping the the output will only pipe
+the payloads, not the log output.
