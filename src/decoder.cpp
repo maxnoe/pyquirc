@@ -40,23 +40,23 @@ void Decoder::resize(size_t width, size_t height) {
     }
 }
 
-int Decoder::count() {
-    return quirc_count(ptr);
+size_t Decoder::count() {
+    return static_cast<size_t>(quirc_count(ptr));
 }
 
-quirc_code Decoder::extract(int index) {
+quirc_code Decoder::extract(size_t index) {
     if (index < 0 || index > count()) {
         std::stringstream msg;
         msg << "Index " << index << " is out of bounds, found " << count() << " codes";
         throw std::out_of_range(msg.str());
     }
     quirc_code code;
-    quirc_extract(ptr, index, &code);
+    quirc_extract(ptr, static_cast<int>(index), &code);
     return code;
 }
 
 
-Data Decoder::decode_index(int index) {
+Data Decoder::decode_index(size_t index) {
     quirc_code code = extract(index);
     return decode(code);
 }
@@ -81,7 +81,12 @@ Data Decoder::decode(const quirc_code& code) {
 }
 
 uint8_t* Decoder::begin() {
-    return quirc_begin(ptr, &width, &height);
+    int int_width;
+    int int_height;
+    uint8_t* buffer = quirc_begin(ptr, &int_width, &int_height);
+    width = static_cast<size_t>(int_width);
+    height = static_cast<size_t>(int_height);
+    return buffer;
 }
 
 void Decoder::end() {

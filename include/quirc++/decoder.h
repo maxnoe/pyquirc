@@ -20,10 +20,10 @@ class Decoder {
         Decoder(const uint8_t* image, size_t width, size_t height);
 
         void fill_image(const uint8_t* image, size_t width, size_t height);
-        int count();
-        quirc_code extract(int index);
+        size_t count();
+        quirc_code extract(size_t index);
         Data decode(const quirc_code& code);
-        Data decode_index(int index);
+        Data decode_index(size_t index);
 
         //  explicitly deleted since we are wrapping
         //  C code that allocates
@@ -42,8 +42,8 @@ class Decoder {
 
     private:
         quirc* ptr = nullptr;
-        int width = 0;
-        int height = 0;
+        size_t width = 0;
+        size_t height = 0;
 
         void resize(size_t width, size_t height);
         uint8_t* begin();
