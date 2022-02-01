@@ -45,6 +45,9 @@ def test_simple(hello_world):
 
     code = codes[0]
     assert code.payload == b'Hello, World!'
+    assert code.eci is quirc.ECI.UNDEFINED
+    assert code.data_type is quirc.DataType.BYTE
+    assert code.version == 1
 
 
 def test_ecc_level_Q(ecc_level_Q):

@@ -72,7 +72,7 @@ PYBIND11_MODULE(quirc, m) {
         .def_readonly("ecc_level", &Data::ecc_level)
         .def_readonly("mask", &Data::mask)
         .def_readonly("data_type", &Data::data_type)
-        .def_readonly("eci", &Data::data_type)
+        .def_readonly("eci", &Data::eci)
         .def_property_readonly("payload", &Data_payload)
         ;
 
