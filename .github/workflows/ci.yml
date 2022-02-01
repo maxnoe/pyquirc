@@ -35,7 +35,7 @@ jobs:
 
       - name: "Run example"
         run: |
-          python example.py
+          python examples/simple.py
 
       - uses: codecov/codecov-action@v2
 

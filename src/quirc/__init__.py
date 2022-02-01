@@ -12,7 +12,13 @@ __all__ = [
     'DataType',
     'ECI',
     'ECCLevel',
+    'decode',
+    'DecodingFailedWarning',
 ]
+
+
+class DecodingFailedWarning(UserWarning):
+    pass
 
 
 def _has_pil_image_interface(img):
@@ -55,7 +61,7 @@ def decode(img):
         try:
             codes.append(decoder[i])
         except RuntimeError:
-            warnings.warn(f"Failed to decode index {i} ({n_codes} codes total)")
+            warnings.warn(f"Failed to decode index {i} ({n_codes} codes total)", DecodingFailedWarning)
 
     return codes
 

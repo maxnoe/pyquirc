@@ -66,8 +66,7 @@ def test_two(two_codes):
 
     # Somehow quirc finds 3 qr codes in the image with only two
     # and decoding # the fake one fails
-    # with pytest.warns(UserWarning):
-    with pytest.warns(UserWarning):
+    with pytest.warns(quirc.DecodingFailedWarning):
         codes = quirc.decode(two_codes)
 
     assert len(codes) == 2
