@@ -16,13 +16,31 @@ using qr::ECCLevel;
 using qr::DataType;
 
 
-Decoder Decoder_from_image(py::array_t<uint8_t>& buffer) {
+Decoder Decoder_from_image(py::buffer buffer) {
     py::buffer_info info = buffer.request();
     if (info.ndim != 2) {
-        throw std::invalid_argument("Must be a 2d buffer");
+        throw std::invalid_argument("Image must be 2d uint8 (8-bit grayscale)");
     }
+
+    if (info.format != py::format_descriptor<uint8_t>::format()) {
+        throw std::invalid_argument("Image must be 2d uint8 (8-bit grayscale)");
+    }
+
     size_t height = info.shape[0];
     size_t width = info.shape[1];
+    return Decoder(static_cast<uint8_t*>(info.ptr), width, height);
+}
+
+Decoder Decoder_from_bytes(py::buffer buffer, size_t width, size_t height) {
+    py::buffer_info info = buffer.request();
+    if (info.ndim != 1) {
+        throw std::invalid_argument("Image must be a bytes-like object");
+    }
+
+    if (info.size != (width * height)) {
+        throw std::invalid_argument("Size of buffer does not match image dimensions");
+    }
+
     return Decoder(static_cast<uint8_t*>(info.ptr), width, height);
 }
 
@@ -77,8 +95,9 @@ PYBIND11_MODULE(quirc, m) {
         ;
 
     py::class_<Decoder>(m, "Decoder")
-        .def(py::init(&Decoder_from_image))
+        .def(py::init(&Decoder_from_image), py::arg("img"))
+        .def_static("from_bytes", &Decoder_from_bytes, py::arg("bytes"), py::arg("width"), py::arg("height"))
         .def("__len__", &Decoder::count)
-        .def("__getitem__", &Decoder::decode_index)
+        .def("__getitem__", &Decoder::decode_index, py::arg("index"))
         ;
 }

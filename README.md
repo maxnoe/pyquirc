@@ -11,17 +11,17 @@ import quirc
 
 img = Image.open("resources/helloworld.png")
 
-# we need to convert to grayscale for quirc
+# we need to convert to 8-bit grayscale for quirc
 img = ImageOps.grayscale(img)
 
-# the image must support the 2d buffer protocal with data type uint8
+# Images must either have `tobytes()`, `width` and `height` like PIL images
+# or support the 2d buffer protocal, both with data type uint8 (8-Bit Grayscale)
 decoded_codes = quirc.decode(img)
 
 print(f'Found {len(decoded_codes)} qr code(s) in the image')
 
 for data in decoded_codes:
     print(data)
-    
 ```
 
 Output:
