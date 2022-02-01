@@ -34,7 +34,7 @@ void Decoder::fill_image(const uint8_t* buffer, size_t width, size_t height) {
 
 
 void Decoder::resize(size_t width, size_t height) {
-    auto ret = quirc_resize(ptr, width, height);
+    auto ret = quirc_resize(ptr, static_cast<int>(width), static_cast<int>(height));
     if (ret < 0) {
         throw std::bad_alloc();
     }

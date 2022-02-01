@@ -58,7 +58,7 @@ jobs:
       - name: "Build"
         run: |
           cmake -S . -B build \
-            -DCMAKE_CXX_FLAGS="-Werror -Wall -Wextra -Wpedantic" \
+            -DCMAKE_CXX_FLAGS="-Werror -Wextra -Wall -Wpedantic -Weffc++ -Wconversion -Wsign-compare -Wunreachable-code -Wunused" \
             -DCMAKE_BUILD_TYPE=Release \
             -DCMAKE_INSTALL_PREFIX=~/.local/quirc++
           cmake --build build -- -j 2

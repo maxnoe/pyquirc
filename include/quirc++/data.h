@@ -43,12 +43,12 @@ enum class ECI {
 };
 
 struct Data {
-    int version;
-    ECCLevel ecc_level;
-    int mask;
-    DataType data_type;
-    std::vector<uint8_t> payload;
-    ECI eci;
+    int version = 0;
+    ECCLevel ecc_level = ECCLevel::M;
+    int mask = 0;
+    DataType data_type = DataType::BYTE;
+    std::vector<uint8_t> payload = {};
+    ECI eci = ECI::UNDEFINED;
 
     Data() {};
     Data(quirc_data data) : 

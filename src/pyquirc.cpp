@@ -26,8 +26,8 @@ Decoder Decoder_from_image(py::buffer buffer) {
         throw std::invalid_argument("Image must be 2d uint8 (8-bit grayscale)");
     }
 
-    size_t height = info.shape[0];
-    size_t width = info.shape[1];
+    auto height = static_cast<size_t>(info.shape[0]);
+    auto width = static_cast<size_t>(info.shape[1]);
     return Decoder(static_cast<uint8_t*>(info.ptr), width, height);
 }
 
@@ -37,7 +37,8 @@ Decoder Decoder_from_bytes(py::buffer buffer, size_t width, size_t height) {
         throw std::invalid_argument("Image must be a bytes-like object");
     }
 
-    if (info.size != (width * height)) {
+    auto expected_size = static_cast<py::ssize_t>(width * height);
+    if (info.size != expected_size) {
         throw std::invalid_argument("Size of buffer does not match image dimensions");
     }
 
