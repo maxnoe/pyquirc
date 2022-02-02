@@ -1,40 +1,4 @@
 import pytest
-from PIL import ImageOps, Image
-import qrcode
-
-
-@pytest.fixture(scope='session')
-def hello_world():
-    img = Image.open('resources/helloworld.png')
-    return ImageOps.grayscale(img)
-
-
-@pytest.fixture(scope='session')
-def ecc_level_Q():
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_Q,
-    )
-
-    qr.add_data('https://example.org')
-    qr.make(fit=True)
-    img = qr.make_image()
-    return ImageOps.grayscale(img)
-
-
-@pytest.fixture(scope='session')
-def two_codes():
-    code1 = qrcode.make('I am the first QR Code').get_image()
-    code2 = qrcode.make('I am the second QR Code').get_image()
-
-    width = code1.width + code2.width
-    height = max(code1.height, code2.height)
-
-    img = Image.new('L', (width, height))
-
-    img.paste(code1, (0, 0))
-    img.paste(code2, (code1.width, 0))
-    return img
 
 
 def test_simple(hello_world):
@@ -52,13 +16,14 @@ def test_simple(hello_world):
 
 def test_ecc_level_Q(ecc_level_Q):
     import quirc
+    _, img, content = ecc_level_Q
 
-    codes = quirc.decode(ecc_level_Q)
+    codes = quirc.decode(img)
     assert len(codes) == 1
 
     code = codes[0]
     assert code.ecc_level == quirc.ECCLevel.Q
-    assert code.payload == b'https://example.org'
+    assert code.payload == content
 
 
 def test_two(two_codes):
