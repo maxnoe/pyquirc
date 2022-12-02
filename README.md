@@ -2,6 +2,16 @@
 
 Python and C++ bindings for the [quirc](https://github.com/dlbeer/quirc) library, created using [pybind11](https://github.com/pybind/pybind11).
 
+## Installation
+
+The package is on pypi, just
+
+```
+$ pip install pyquirc
+```
+
+There is an older, no longer maintained package `quirc`, not to be confused.
+
 ## Example
 
 ```python
