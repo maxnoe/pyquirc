@@ -30,6 +30,18 @@ Found 1 qr code(s) in the image
 Data(payload=b'Hello, World!', version=1, data_type=DataType.BYTE, eci=ECI.UNDEFINED, ecc_level=ECCLevel.M, mask=5)
 ```
 
+## Installation (On Mac)
+```
+git clone --recurse-submodules https://github.com/maxnoe/pyquirc.git
+pip install scikit-build
+pip install packaging 
+pip install pyparsing
+brew install cmake  
+pip install cmake
+pip install pybind11  
+brew install ninja 
+pip install .  
+```
 
 ## On the Command Line
 
