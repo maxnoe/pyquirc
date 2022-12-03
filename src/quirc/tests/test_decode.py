@@ -7,11 +7,13 @@ def test_simple(hello_world):
     codes = quirc.decode(hello_world)
     assert len(codes) == 1
 
-    code = codes[0]
-    assert code.payload == b'Hello, World!'
-    assert code.eci == quirc.ECI.UNDEFINED
-    assert code.data_type == quirc.DataType.BYTE
-    assert code.version == 1
+    code, data = codes[0]
+    assert isinstance(code, quirc.Code)
+    assert isinstance(data, quirc.Data)
+    assert data.payload == b'Hello, World!'
+    assert data.eci == quirc.ECI.UNDEFINED
+    assert data.data_type == quirc.DataType.BYTE
+    assert data.version == 1
 
 
 def test_ecc_level_Q(ecc_level_Q):
@@ -21,9 +23,9 @@ def test_ecc_level_Q(ecc_level_Q):
     codes = quirc.decode(img)
     assert len(codes) == 1
 
-    code = codes[0]
-    assert code.ecc_level == quirc.ECCLevel.Q
-    assert code.payload == content
+    code, data = codes[0]
+    assert data.ecc_level == quirc.ECCLevel.Q
+    assert data.payload == content
 
 
 def test_two(two_codes):
@@ -35,7 +37,7 @@ def test_two(two_codes):
         codes = quirc.decode(two_codes)
 
     assert len(codes) == 2
-    payloads = {c.payload for c in codes}
+    payloads = {d.payload for _, d in codes}
     assert b'I am the first QR Code' in payloads
     assert b'I am the second QR Code' in payloads
 
@@ -48,4 +50,5 @@ def test_numpy(hello_world):
     codes = quirc.decode(img)
 
     assert len(codes) == 1
-    assert codes[0].payload == b'Hello, World!'
+    _, data = codes[0]
+    assert data.payload == b'Hello, World!'

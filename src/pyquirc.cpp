@@ -3,6 +3,7 @@
 #include <pybind11/pybind11.h>
 #include <pybind11/stl.h>
 #include <pybind11/numpy.h>
+#include <tuple>
 
 #include "quirc++/decoder.h"
 #include "quirc++/data.h"
@@ -131,7 +132,11 @@ PYBIND11_MODULE(quirc, m) {
         .def(py::init(&Decoder_from_image), py::arg("img"))
         .def_static("from_bytes", &Decoder_from_bytes, py::arg("bytes"), py::arg("width"), py::arg("height"))
         .def("__len__", &Decoder::count)
-        .def("__getitem__", &Decoder::decode_index, py::arg("index"))
+        .def("__getitem__", [](Decoder& self, size_t index) {
+            auto code = self.extract(index);
+            auto data = self.decode(code);
+            return std::make_tuple(code, data);
+        }, py::arg("index"))
         .def("extract", &Decoder::extract)
         .def("decode", &Decoder::decode)
         ;

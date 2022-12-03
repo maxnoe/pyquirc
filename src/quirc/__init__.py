@@ -3,10 +3,11 @@ Python bindings for the quirc C-library using pybind11
 '''
 import warnings
 
-from .quirc import Decoder, Data, DataType, ECI, ECCLevel
+from .quirc import Decoder, Data, Code, DataType, ECI, ECCLevel
 
 
 __all__ = [
+    'Code',
     'Decoder',
     'Data',
     'DataType',
@@ -79,4 +80,9 @@ def _data_repr(self):
     )
 
 
+def _code_repr(self):
+    return f'Code(size={self.size}, corners={self.corners!r})'
+
+
 Data.__repr__ = _data_repr
+Code.__repr__ = _code_repr
