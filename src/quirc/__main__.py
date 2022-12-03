@@ -38,9 +38,9 @@ def main():
     decoded = decode(gray)
     n_decoded = len(decoded)
     log.info(f'Found {n_decoded} qr code{"s" if n_decoded > 1 else ""} in image')
-    for i, qrcode in enumerate(decoded, start=1):
+    for i, (code, data) in enumerate(decoded, start=1):
         log.info(f'--- Payload {i} ---')
-        print(qrcode.payload.decode('ascii'))
+        print(data.payload.decode('ascii'))
 
 
 if __name__ == '__main__':

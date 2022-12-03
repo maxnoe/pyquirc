@@ -31,12 +31,14 @@ decoded_codes = quirc.decode(img)
 print(f'Found {len(decoded_codes)} qr code(s) in the image')
 
 for code, data in decoded_codes:
-    print(code, data)
+    print(code)
+    print(data)
 ```
 
 Output:
 ```
 Found 1 qr code(s) in the image
+Code(size=21, corners=[Point(40, 40), Point(250, 40), Point(250, 250), Point(40, 250)])
 Data(payload=b'Hello, World!', version=1, data_type=DataType.BYTE, eci=ECI.UNDEFINED, ecc_level=ECCLevel.M, mask=5)
 ```
 

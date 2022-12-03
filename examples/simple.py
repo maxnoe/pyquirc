@@ -13,4 +13,5 @@ decoded_codes = quirc.decode(img)
 print(f'Found {len(decoded_codes)} qr code(s) in the image')
 
 for code, data in decoded_codes:
+    print(code)
     print(data)
