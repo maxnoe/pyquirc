@@ -14,7 +14,13 @@
 namespace qr {
 
 #include <quirc.h>
-using quirc_ptr = std::unique_ptr<quirc, void(*)(quirc*)>;
+
+struct QuircDeleter {
+    void operator()(quirc* q) {
+        quirc_destroy(q);
+    }
+};
+using quirc_ptr = std::unique_ptr<quirc, QuircDeleter>;
 
 class Decoder {
     public:

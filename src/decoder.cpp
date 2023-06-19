@@ -1,11 +1,10 @@
 #include "quirc++/decoder.h"
 #include "quirc.h"
-#include <new>
 #include <sstream>
 
 namespace qr {
 
-Decoder::Decoder() : ptr(quirc_new(), quirc_destroy) {
+Decoder::Decoder() : ptr(quirc_new()) {
     if (!ptr) {
         throw std::bad_alloc();
     }
