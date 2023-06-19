@@ -76,9 +76,7 @@ Data Decoder::decode(const quirc_code& code) {
 }
 
 uint8_t* Decoder::begin() {
-    int int_width;
-    int int_height;
-    uint8_t* buffer = quirc_begin(ptr.get(), &int_width, &int_height);
+    uint8_t* buffer = quirc_begin(ptr.get(), nullptr, nullptr);
     return buffer;
 }
 
