@@ -67,7 +67,7 @@ if(CPP_EXAMPLE)
     )
 endif()
 
-find_package(Python3 REQUIRED COMPONENTS Development Interpreter)
+find_package(Python3 COMPONENTS Interpreter Development.Module REQUIRED)
 find_package(pybind11 REQUIRED)
 
 pybind11_add_module(pyquirc src/pyquirc.cpp)
