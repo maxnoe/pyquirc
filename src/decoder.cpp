@@ -1,20 +1,16 @@
 #include "quirc++/decoder.h"
+#include "quirc.h"
+#include <new>
 #include <sstream>
 
 namespace qr {
 
-Decoder::Decoder() {
-    ptr = quirc_new();
+Decoder::Decoder() : ptr(quirc_new(), quirc_destroy) {
     if (!ptr) {
         throw std::bad_alloc();
     }
 }
 
-Decoder::~Decoder() {
-    if (ptr) {
-        quirc_destroy(ptr);
-    }
-}
 
 Decoder::Decoder(const uint8_t* buffer, size_t width, size_t height) : Decoder() {
     fill_image(buffer, width, height);
@@ -34,14 +30,14 @@ void Decoder::fill_image(const uint8_t* buffer, size_t width, size_t height) {
 
 
 void Decoder::resize(size_t width, size_t height) {
-    auto ret = quirc_resize(ptr, static_cast<int>(width), static_cast<int>(height));
+    auto ret = quirc_resize(ptr.get(), static_cast<int>(width), static_cast<int>(height));
     if (ret < 0) {
         throw std::bad_alloc();
     }
 }
 
 size_t Decoder::count() {
-    return static_cast<size_t>(quirc_count(ptr));
+    return static_cast<size_t>(quirc_count(ptr.get()));
 }
 
 quirc_code Decoder::extract(size_t index) {
@@ -51,7 +47,7 @@ quirc_code Decoder::extract(size_t index) {
         throw std::out_of_range(msg.str());
     }
     quirc_code code;
-    quirc_extract(ptr, static_cast<int>(index), &code);
+    quirc_extract(ptr.get(), static_cast<int>(index), &code);
     return code;
 }
 
@@ -83,14 +79,12 @@ Data Decoder::decode(const quirc_code& code) {
 uint8_t* Decoder::begin() {
     int int_width;
     int int_height;
-    uint8_t* buffer = quirc_begin(ptr, &int_width, &int_height);
-    width = static_cast<size_t>(int_width);
-    height = static_cast<size_t>(int_height);
+    uint8_t* buffer = quirc_begin(ptr.get(), &int_width, &int_height);
     return buffer;
 }
 
 void Decoder::end() {
-    quirc_end(ptr);
+    quirc_end(ptr.get());
 }
 
 }

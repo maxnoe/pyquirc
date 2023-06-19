@@ -4,15 +4,17 @@
 #include <cstdint>
 #include <new>
 #include <stdexcept>
+#include <utility>
 #include <vector>
+#include <memory>
 
 #include "quirc++/data.h"
-
 
 
 namespace qr {
 
 #include <quirc.h>
+using quirc_ptr = std::unique_ptr<quirc, void(*)(quirc*)>;
 
 class Decoder {
     public:
@@ -32,18 +34,10 @@ class Decoder {
 
         // Could be implemented but not for now
         Decoder& operator=(Decoder&&) = delete;
-
-        Decoder(Decoder&& other) {
-            ptr = other.ptr;
-            other.ptr = nullptr;
-        }
-
-        ~Decoder();
+        Decoder(Decoder&& other) : ptr(std::exchange(other.ptr, nullptr)) {}
 
     private:
-        quirc* ptr = nullptr;
-        size_t width = 0;
-        size_t height = 0;
+        quirc_ptr ptr;
 
         void resize(size_t width, size_t height);
         uint8_t* begin();
